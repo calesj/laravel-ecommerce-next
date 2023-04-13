@@ -1,1 +1,1 @@
-# laravel-ecommerce-next
+# laravel-ecommerce-nextjs
