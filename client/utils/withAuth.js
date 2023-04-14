@@ -23,18 +23,21 @@ const withAuth = (WrappedComponent) => {
                 setAuthenticated(isAuth)
 
                 if (!isAuth) {
-                    router.push('/')
+                    router.push('/login')
                 } else {
+                    // traz as informacoes do usario e envia como props para os componentes
                     const userDataResponse = await axios.get('http://127.0.0.1:8000/api/user', {
                         headers: { 'Authorization': `Bearer ${localStorage.getItem('app-token')}` }
                     })
                     setUserData(userDataResponse.data)
                 }
             }
-
+            // assim que a pagina for renderizada, ele chama essa funcao
             checkAuthentication()
         }, [])
 
+        // se o usuario estiver autenticado ele vai ser redirecionado pra pagina inicial, senao, aparecera uma tela
+        // de carregamento que logo em siga vai redirecionar de volta pra pagina de login
         return authenticated ? <WrappedComponent {...props} userData={userData} />  : <Spinner></Spinner>
     }
 
