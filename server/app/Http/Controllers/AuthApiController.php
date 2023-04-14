@@ -32,25 +32,24 @@ class AuthApiController extends Controller
         }
 
         try {
-            //criando o carrinho de compras do usuario
-            $cart = new Cart;
-
-            // salvando no banco o carrinho de compras
-            $cart->save();
 
             // Crie uma nova instância do modelo User
             $user = new User;
-
 
             // Atribua os valores dos campos do formulário ao modelo User
             $user->name = $request['name'];
             $user->email = $request['email'];
             $user->password = bcrypt($request['password']);
-            $user->cart_id = $cart->id;
 
             // Salve o usuário no banco de dados
             $user->save();
 
+            //criando o carrinho de compras do usuario
+            $cart = new Cart;
+            $cart->user_id = $user->id;
+
+            // salvando no banco o carrinho de compras
+            $cart->save();
 
             // Faça o login do usuário recém-registrado
             Auth::login($user);
