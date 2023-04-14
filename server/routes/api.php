@@ -20,3 +20,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [\App\Http\Controllers\AuthApiController::class, 'register']);
 Route::post('/login', [\App\Http\Controllers\AuthApiController::class, 'login']);
+
+// Ao usar o middleware "auth:sanctum", o Laravel verificará se o token de autenticação fornecido na solicitação
+// é válido
+Route::middleware('auth:sanctum')->prefix('cart')->group( function () {
+Route::get('', [\App\Http\Controllers\CartController::class, 'index']);
+Route::get('{id}', [\App\Http\Controllers\CartController::class, 'index']);
+Route::post('', [\App\Http\Controllers\CartController::class, 'index']);
+Route::put('{id}', [\App\Http\Controllers\CartController::class, 'index']);
+Route::delete('{id}', [\App\Http\Controllers\CartController::class, 'index']);
+});
