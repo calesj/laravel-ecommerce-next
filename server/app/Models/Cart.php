@@ -9,16 +9,14 @@ class Cart extends Model
 {
     use HasFactory;
 
-    protected $attributes = [
-        'origin' => '',
-        'name'=> '',
-        'description'=> '',
-        'price'=> 0,
-        'category'=> ''
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // relacionamento muitos pra muitos onde um carrinho pode ter varios produtos
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'cart_product');
     }
 }
