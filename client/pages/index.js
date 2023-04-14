@@ -1,3 +1,10 @@
-import Login from "./login";
+import withAuth from "@/utils/withAuth";
 
-export default Login
+
+const dashboard = () => {
+    return (
+        <p>opa</p>
+    )
+}
+
+export default withAuth(dashboard)
