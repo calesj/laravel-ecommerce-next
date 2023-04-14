@@ -132,10 +132,10 @@ function ProductListEuropa({ openDrawer, onCloseDrawer, userData }) {
                                     <center><b><Text> R$ {product.preco}</Text></b></center>
                                     <Select>
                                         <option value={1}>1 item</option>
-                                        <option value={2}>2 item</option>
-                                        <option value={3}>3 item</option>
-                                        <option value={4}>4 item</option>
-                                        <option value={5}>5 item</option>
+                                        <option value={2}>2 itens</option>
+                                        <option value={3}>3 itens</option>
+                                        <option value={4}>4 itens</option>
+                                        <option value={5}>5 itens</option>
                                     </Select>
                                 </Box>
                             ))}
