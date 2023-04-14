@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react"
 import axios from 'axios'
 import {useState} from "react"
+import {useRouter} from "next/router";
 const Login = () => {
 
     // definindo o estado pra armazenar erros de validacao
@@ -18,6 +19,8 @@ const Login = () => {
 
     // definindo o estado para armazenar erro de autenticacao
     const [errorAuthenticate, setErrorAuthenticate] = useState('')
+
+    const router = useRouter()
 
     // metodo submit, faz a requisicao post para API enviando os dados do formulario
     const handleSubmit = (event) => {
@@ -34,7 +37,7 @@ const Login = () => {
                 if (data) {
                     if (data) {
                         localStorage.setItem('app-token', data.access_token)
-                        window.location.replace('/brasil')
+                        router.push('/')
                     }
                 }
             })
