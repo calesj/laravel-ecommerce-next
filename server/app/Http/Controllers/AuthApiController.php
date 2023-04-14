@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Form\FormValidation;
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthApiController extends Controller
 {
@@ -18,6 +21,8 @@ class AuthApiController extends Controller
 
     public function register(Request $request)
     {
+        // criando um ponto de restauracao
+        DB::beginTransaction();
 
         // Valide os dados do formulário de registro
         $validate = FormValidation::validar($request->all(), $this->rules);
@@ -26,28 +31,49 @@ class AuthApiController extends Controller
             return $validate;
         }
 
-        // Crie uma nova instância do modelo Userph
-        $user = new User;
+        try {
+            //criando o carrinho de compras do usuario
+            $cart = new Cart;
 
-        // Atribua os valores dos campos do formulário ao modelo User
-        $user->name = $request['name'];
-        $user->email = $request['email'];
-        $user->password = bcrypt($request['password']);
+            // salvando no banco o carrinho de compras
+            $cart->save();
 
-        // Salve o usuário no banco de dados
-        $user->save();
+            // Crie uma nova instância do modelo User
+            $user = new User;
 
-        // Faça o login do usuário recém-registrado
-        Auth::login($user);
 
-        // Crie um token de acesso para o usuário
-        $accessToken = $user->createToken('authToken')->plainTextToken;
+            // Atribua os valores dos campos do formulário ao modelo User
+            $user->name = $request['name'];
+            $user->email = $request['email'];
+            $user->password = bcrypt($request['password']);
+            $user->cart_id = $cart->id;
 
-        // Retorne a resposta JSON com o token de acesso
-        return response()->json([
-            'user' => $user,
-            'access_token' => $accessToken
-        ]);
+            // Salve o usuário no banco de dados
+            $user->save();
+
+
+            // Faça o login do usuário recém-registrado
+            Auth::login($user);
+
+            // Crie um token de acesso para o usuário
+            $accessToken = $user->createToken('authToken', [''], now()->addMinute(30))->plainTextToken;
+
+            // confirma a operacao no banco
+            DB::commit();
+
+            // Retorne a resposta JSON com o token de acesso
+            return response()->json([
+                'user' => $user,
+                'access_token' => $accessToken
+            ]);
+        } catch (QueryException $e) {
+            // volta para o ponto de restauracao
+            DB::rollBack();
+
+            return response()->json($e);
+        }
+
+
     }
 
     public function login(Request $request)
@@ -65,7 +91,7 @@ class AuthApiController extends Controller
             return $validate;
         }
 
-        //obter apenas as informações relevantes do objeto de solicitação, que neste caso são o e-mail e a senha do usuário.
+        // obter apenas as informações relevantes do objeto de solicitação, que neste caso são o e-mail e a senha do usuário.
         $credentials = $request->only('email', 'password');
 
         /*
@@ -84,7 +110,8 @@ class AuthApiController extends Controller
              * método plainTextToken para obter o token de acesso como uma string de texto simples para ser retornada
              * na resposta JSON.
              */
-            $token = $user->createToken('access_token')->plainTextToken;
+            // vai criar um token de validacao valido por 30 minutos
+            $token = $user->createToken('access_token', [''], now()->addMinute(30))->plainTextToken;
 
             return response()->json([
                 'access_token' => $token,
