@@ -17,9 +17,6 @@ function ProductCard({ product, onClose }) {
     const handleAddToCart = () => {
         setIsLoading(true)
         const productWithNewField = { ...product, quantity: selectValue };
-
-        console.log('produto adicionado', productWithNewField)
-
         const endpoint = 'http://127.0.0.1:8000/api/cart/';
         const method = 'POST';
 

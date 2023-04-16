@@ -32,7 +32,6 @@ function CartDrawer({ isOpen, onClose }) {
 
             const response = await makeRequest(endpoint, method);
             const fetchedCartItems = response[0].products;
-            console.log('itens carregados aqui', fetchedCartItems)
             setCartItems(fetchedCartItems);
             setIsLoading(false);
         } catch (error) {
