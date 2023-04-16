@@ -1,4 +1,4 @@
-import { Button, Text, Flex, useColorModeValue } from "@chakra-ui/react";
+import {Button, Text, Flex, useColorModeValue, Icon} from "@chakra-ui/react";
 import { FiShoppingCart, FiLogOut, FiUser, FiHome } from "react-icons/fi";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -43,6 +43,14 @@ function NavComponent() {
                     Bem-vindo, {userData ? userData.name : "visitante"}!
                 </Text>
                 <Flex>
+                    <Button
+                        colorScheme="transparent"
+                        onClick={() => router.push("/europa")}
+                        mr={4}
+                        _hover={{ background: "#1A202C" }}
+                    >
+                        Produtos da Europa
+                    </Button>
                     <Button onClick={handleOrderOpen}>Pedidos</Button>
                     <Button
                         colorScheme="transparent"
