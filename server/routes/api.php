@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     Route::post('', [\App\Http\Controllers\CartController::class, 'addToCart']);
     Route::get('', [\App\Http\Controllers\CartController::class, 'getProductsCart']);
     Route::delete('/{id}', [\App\Http\Controllers\CartController::class, 'removeFromCart']);
+    Route::delete('', [\App\Http\Controllers\CartController::class, 'deleteAllProductsFromCart']);
 });
 
 Route::middleware('auth:sanctum')->prefix('order')->group(function () {
