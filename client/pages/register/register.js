@@ -117,7 +117,7 @@ return (
                             marginTop={6}
                             width="full"
                         >
-                            Enviar
+                            Cadastrar
                         </Button>
                     </form>
                 </Card>
