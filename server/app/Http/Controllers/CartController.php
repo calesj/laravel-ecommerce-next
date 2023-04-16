@@ -51,10 +51,15 @@ class CartController extends Controller
             // pra verificar se o campo esta vindo da API da europa ou da API do brasil
             if (!$product){
                 $product = new Product;
-                $product->name = $this->request->name;
                 $product->api_id = $this->request->api_id;
                 $product->origins = $this->request->origins;
+                $product->name = $this->request->name;
+                $product->image = $this->request->image;
+                $product->description = $this->request->description;
+                $product->category = $this->request->category;
                 $product->price = $this->request->price;
+                $product->material = $this->request->material;
+                $product->department = $this->request->department;
                 $product->save();
             }
 
