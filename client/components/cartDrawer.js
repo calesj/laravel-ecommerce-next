@@ -63,8 +63,18 @@ function CartDrawer({ isOpen, onClose }) {
         }
     };
 
-    const handleClearCart = () => {
-        clearCart();
+    const handleClearCart = async () => {
+        setIsLoading(true)
+        try {
+            const endpoint = `http://127.0.0.1:8000/api/cart`
+            const method = 'DELETE'
+            await makeRequest(endpoint, method)
+            clearCart();
+            setIsLoading(false)
+        } catch (e) {
+            console.log(e)
+        }
+
     };
 
     const handleCheckout = async () => {
