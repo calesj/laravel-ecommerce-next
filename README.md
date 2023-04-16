@@ -27,12 +27,16 @@
 8 - Com o servidor local ativo, em ambos os diretórios, acesse `http://localhost:3000/` para utilizar a aplicação.
 
 ## Observações
+- Os usuários têm acesso às páginas, no entanto, é necessário fazer o registro para adicionar um item ao carrinho ou fazer um pedido. Se o usuário tentar fazer qualquer uma dessas ações sem estar logado, ele será redirecionado.
+
+- O carrinho de compras é relacionado com o usuario parte do banco e quando um produto é adicionado a ele, ele é salvo no carrinho até que o usuário o remova.
+
+- Lembrando que fazer um pedido e adicionar um produto ao carrinho são coisas diferentes. Ambos estão disponíveis na aplicação e ambos são salvos no banco.
+
+## Experiencia de desenvolvimento
 
 Tive dificuldades no início por não ter experiência com o desenvolvimento de front-end usando Next.js. No entanto, essa experiência me permitiu perceber o quão poderoso é o React e a sua utilidade para criar diversas aplicações. Comecei desenvolvendo todo o layout utilizando o React e, durante esses três dias, refiz o front-end várias vezes devido a bugs na aplicação. Depois de pesquisar muito, consegui desenvolver de uma maneira mais eficiente, separei os componentes em um diretório diferente e criei um ContextCart para manipular melhor os itens do carrinho entre as páginas.
 
-O carrinho de compras é relacionado com o usuario parte do banco e quando um produto é adicionado a ele, ele é salvo no carrinho até que o usuário o remova.
-
-Lembrando que fazer um pedido e adicionar um produto ao carrinho são coisas diferentes. Ambos estão disponíveis na aplicação e ambos são salvos no banco.
 
 ## Autenticação
 
