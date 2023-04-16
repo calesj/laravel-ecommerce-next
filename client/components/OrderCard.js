@@ -1,7 +1,5 @@
-import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
+import {Box, Flex, IconButton, Spinner, Text} from "@chakra-ui/react";
 import { FaTimes } from "react-icons/fa";
-import LoadingComponent from "@/components/loading";
-import CartDrawer from "@/components/cartDrawer";
 import { useEffect, useState } from "react";
 import { makeRequest } from "@/utils/api";
 import { useRouter } from "next/router";
@@ -62,33 +60,36 @@ const OrderCard = ({ isOpen, onClose }) => {
                         boxShadow="md"
                         display={isOpen ? "block" : "none"}
                     >
-                        <Flex justifyContent="space-between">
+                        <Flex justifyContent="space-between" alignItems="center" mb={4}>
                             <Text fontWeight="bold">Meus Pedidos</Text>
                             <IconButton
-                                size="lg"
-                                icon={<FaTimes />}
+                                size="sm"
+                                icon={<FaTimes/>}
                                 onClick={onClose}
                                 aria-label="Fechar"
                             />
                         </Flex>
-                        {isLoading ? (
-                            <LoadingComponent />
-                        ) : isOrders.length > 0 ? (
-                            isOrders.map((order) => (
-                                <Box key={order.id} my={4}>
-                                    <Text fontWeight="bold">Pedido #{order.id}</Text>
-                                    <Text>Preço total: R${order.total_price}</Text>
-                                    <Text>Status: {order.status}</Text>
-                                </Box>
-                            ))
-                        ) : (
-                            <Text>Você ainda não fez nenhum pedido.</Text>
+                        {isOrders.length === 0 && <Text>Você ainda não fez nenhum pedido.</Text>}
+                        {isOrders.length > 0 && (
+                            <>
+                                {isLoading && <Spinner/>}
+                                {!isLoading &&
+                                    isOrders.map((order) => (
+                                        <Box key={order.id}>
+                                            <Text fontWeight="bold">Pedido #{order.id}</Text>
+                                            <Text>Preço total: R$ {order.total_price}</Text>
+                                            <Text>Status: {order.status}</Text>
+                                        </Box>
+                                    ))}
+                            </>
                         )}
                     </Box>
-                </>
+                </> // Parêntese fechando o segundo bloco
             )}
-        </>
-    );
-};
+        </> // Parêntese fechando o primeiro bloco
+    )
+}
 
-export default OrderCard;
+export default OrderCard
+
+
