@@ -54,3 +54,15 @@ O maior problema que enfrentei foi a possibilidade de existirem dois produtos co
 
 Eu decidi não salvar todos os produtos de uma só vez no banco de dados para evitar sobrecarregar o servidor. Então, sempre que um usuário adiciona um produto ao carrinho, as informações desse produto são salvas no banco, caso ainda não existam.
 
+## Veja aplicação em funcionamento:
+
+### 1 - Primeiro acesso (necessário fazer login para conseguir fazer requisições para API).
+![primeiro-acesso](https://user-images.githubusercontent.com/86434489/232346875-d842b882-cf0d-4417-a8f8-6dd9abb6acdd.gif)
+
+### 2 - Fazendo o primeiro pedido
+![fazendo-pedido](https://user-images.githubusercontent.com/86434489/232346994-03009f84-b6d2-432f-a828-ff312da0f3ad.gif)
+
+### 3 - Testando os deletes
+![testando-deletes](https://user-images.githubusercontent.com/86434489/232347187-5308ae0b-af73-468b-bd41-ab92d3f4fae2.gif)
+
+
