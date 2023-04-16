@@ -35,7 +35,12 @@ Tive dificuldades no início por não ter experiência com o desenvolvimento de 
 Utilizei o middleware de autenticação fornecido pelo Laravel para fazer a autenticação na aplicação. O processo é simples: o usuário faz a requisição passando o e-mail e a senha, se estiverem corretos, o servidor retorna um token de autenticação. Com esse token, podemos realizar as requisições que precisam de autenticação na API. No front-end, armazenamos o token e antes de realizar qualquer requisição, verificamos se o token é válido. Se não for, redirecionamos o usuário para a tela de login.
 
 
-## diretorios importantes client
+## diretórios importantes client
+
 - No diretório `utils`, estarão os arquivos que criei para fazer a autenticação.
 - No diretório `components`, estarão os componentes necessários para que a aplicação funcione corretamente.
+
+## A lógica utilizada para consumir duas APIs diferentes de fornecedores.
+
+O maior problema que enfrentei foi a possibilidade de existirem dois produtos com o mesmo ID provenientes de APIs diferentes. Para contornar isso, implementei o campo origins no banco de dados, que armazena 'BRA' caso o produto seja proveniente da API brasileira e 'EU' caso seja proveniente da API europeia. Além disso, renomeei o ID original para api_id, permitindo que o Laravel crie um ID universal para todos os produtos independentemente da API de origem.
 
