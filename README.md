@@ -32,6 +32,8 @@ Tive dificuldades no início por não ter experiência com o desenvolvimento de 
 
 O carrinho de compras é relacionado com o usuario parte do banco e quando um produto é adicionado a ele, ele é salvo no carrinho até que o usuário o remova.
 
+Lembrando que fazer um pedido e adicionar um produto ao carrinho são coisas diferentes. Ambos estão disponíveis na aplicação e ambos são salvos no banco.
+
 ## Autenticação
 
 Utilizei o middleware de autenticação fornecido pelo Laravel para fazer a autenticação na aplicação. O processo é simples: o usuário faz a requisição passando o e-mail e a senha, se estiverem corretos, o servidor retorna um token de autenticação. Com esse token, podemos realizar as requisições que precisam de autenticação na API. No front-end, armazenamos o token e antes de realizar qualquer requisição, verificamos se o token é válido. Se não for, redirecionamos o usuário para a tela de login.
