@@ -10,10 +10,11 @@ import {
     DrawerCloseButton,
     Image,
     Text,
-    Spacer, Spinner,
+    Spacer, Spinner, IconButton, HStack, Flex,
 } from "@chakra-ui/react";
 import {useEffect, useMemo, useState} from "react";
 import {makeRequest} from "@/utils/api";
+import {FaTrash, FaMoneyBill} from "react-icons/fa";
 
 function CartDrawer({ isOpen, onClose }) {
     const { cart, removeFromCart, clearCart, setCartItems } = useCartContext();
@@ -32,6 +33,7 @@ function CartDrawer({ isOpen, onClose }) {
 
             const response = await makeRequest(endpoint, method);
             const fetchedCartItems = response[0].products;
+            console.log('itens vindo do banco', fetchedCartItems)
             setCartItems(fetchedCartItems);
             setIsLoading(false);
         } catch (error) {
@@ -100,34 +102,46 @@ function CartDrawer({ isOpen, onClose }) {
                 <DrawerCloseButton />
                 <DrawerHeader>Carrinho</DrawerHeader>
                 <DrawerBody>
-                    { isLoading ? (
+                    {isLoading ? (
                         <Spinner />
                     ) : (
                         <>
                             {cart && cart.length > 0 ? (
                                 cart.map((product) => (
-                                    <Box key={product.api_id} mb={4} display="flex" alignItems="center">
-                                        <Image src={product.image} w={16} h={16} mr={4} borderRadius="md" />
-                                        <Text fontWeight="semibold">{product.name}</Text>
-                                        <Text>Qtd: {product.quantity}</Text>
-                                        <Spacer />
-                                        <Button size="sm" colorScheme="red" ml={4} onClick={() => handleRemoveFromCart(product)}>
-                                            Remover
-                                        </Button>
-                                    </Box>
+                                    <Flex key={product.api_id} mb={4} alignItems="center">
+                                        <Box>
+                                            <Image src={product.image} w={16} h={16} mr={4} borderRadius="md" />
+                                        </Box>
+                                        <Box flex="1">
+                                            <Text fontWeight="semibold">{product.name}</Text>
+                                            <Text>Qtd: {product.quantity ?? product.pivot.quantity}</Text>
+                                        </Box>
+                                        <Box>
+                                            <IconButton
+                                                aria-label="Remover do carrinho"
+                                                icon={<FaTrash />}
+                                                colorScheme="red"
+                                                onClick={() => handleRemoveFromCart(product)}
+                                            />
+                                        </Box>
+                                    </Flex>
                                 ))
                             ) : (
                                 <Text>Nenhum produto adicionado ao carrinho.</Text>
                             )}
                             {cart && cart.length > 0 && (
                                 <Box mt={4}>
-                                    <Text fontWeight="semibold">Total do pedido: R$ {total.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
-                                    <Button colorScheme="red" size="sm" onClick={handleClearCart} mr={2}>
-                                        Esvaziar carrinho
-                                    </Button>
-                                    <Button colorScheme="green" size="sm" onClick={handleCheckout}>
-                                        Fechar pedido
-                                    </Button>
+                                    <Text fontWeight="semibold">
+                                        Total do pedido: R$ {total.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    </Text>
+                                    <HStack mt={2} spacing={4}>
+                                        <Button colorScheme="red" size="sm" onClick={handleClearCart} leftIcon={<FaTrash />}>
+                                            Esvaziar carrinho
+                                        </Button>
+                                        <Button colorScheme="green" size="sm" onClick={handleCheckout} leftIcon={<FaMoneyBill />}>
+                                            Fechar pedido
+                                        </Button>
+                                    </HStack>
                                 </Box>
                             )}
                         </>
