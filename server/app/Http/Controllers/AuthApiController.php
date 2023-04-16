@@ -71,8 +71,6 @@ class AuthApiController extends Controller
 
             return response()->json($e);
         }
-
-
     }
 
     public function login(Request $request)
