@@ -2,6 +2,7 @@ import NavComponent from "@/components/nav";
 import axios from "axios";
 import {useRouter} from "next/router";
 import ProductCard from "@/components/ProductCard";
+import {FaSearch} from "react-icons/fa";
 import {
     Grid,
     GridItem,
@@ -12,7 +13,7 @@ import {
     FormLabel,
     InputGroup,
     InputLeftElement,
-    Input, Button
+    Input, Button, Icon
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/loading";
@@ -74,7 +75,10 @@ const ProductListEuropa = () => {
                         <FormControl>
                             <FormLabel>Buscar Produtos</FormLabel>
                             <InputGroup>
-                                <InputLeftElement pointerEvents="none" />
+                                <InputLeftElement
+                                    pointerEvents="none"
+                                    children={<Icon as={FaSearch} color="gray.300" />}
+                                />
                                 <Input
                                     type="text"
                                     placeholder="Digite aqui o nome do produto"
@@ -83,6 +87,7 @@ const ProductListEuropa = () => {
                                 />
                             </InputGroup>
                         </FormControl>
+
                     </Box>
                     <Grid templateColumns={{base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)'}} gap={6}>
                     {filteredProducts.map((product) => (
