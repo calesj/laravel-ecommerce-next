@@ -67,8 +67,9 @@ function ProductCard({ product, onClose }) {
             >
                 <Flex ml="90%">
                     <IconButton
-                        size="lg"
+                        maxH={{ base: "40px", md: "none" }} overflow="hidden"
                         icon={<FaTimes />}
+                        mb="3"
                         onClick={onClose}
                         aria-label="Fechar"
                     />
