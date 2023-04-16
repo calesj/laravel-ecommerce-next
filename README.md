@@ -25,3 +25,17 @@
 7 - Após o download dos pacotes, execute o comando `yarn dev` no terminal para iniciar o servidor local do cliente.
 
 8 - Com o servidor local ativo, em ambos os diretórios, acesse `http://localhost:3000/` para utilizar a aplicação.
+
+## Observacoes
+
+Tive dificuldades no início por não ter experiência com o desenvolvimento de front-end usando Next.js. No entanto, essa experiência me permitiu perceber o quão poderoso é o React e a sua utilidade para criar diversas aplicações. Comecei desenvolvendo todo o layout utilizando o React e, durante esses três dias, refiz o front-end várias vezes devido a bugs na aplicação. Depois de pesquisar muito, consegui desenvolver de uma maneira mais eficiente, separei os componentes em um diretório diferente e criei um ContextCart para manipular melhor os itens do carrinho entre as páginas.
+
+## Autenticacao
+
+Utilizei o middleware de autenticação fornecido pelo Laravel para fazer a autenticação na aplicação. O processo é simples: o usuário faz a requisição passando o e-mail e a senha, se estiverem corretos, o servidor retorna um token de autenticação. Com esse token, podemos realizar as requisições que precisam de autenticação na API. No front-end, armazenamos o token e antes de realizar qualquer requisição, verificamos se o token é válido. Se não for, redirecionamos o usuário para a tela de login.
+
+
+## diretorios importantes client
+- No diretório `utils`, estarão os arquivos que criei para fazer a autenticação.
+- No diretório `components`, estarão os componentes necessários para que a aplicação funcione corretamente.
+
