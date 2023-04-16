@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('category')->nullable();
+            $table->string('image')->nullable();
             $table->decimal('price');
             $table->string('material')->nullable();
             $table->string('department')->nullable();
