@@ -1,209 +1,130 @@
-import { useEffect, useState } from "react"
+import NavComponent from "@/components/nav";
+import axios from "axios";
+import {useRouter} from "next/router";
+import ProductCard from "@/components/ProductCard";
 import {
-    Select,
-    DrawerBody,
-    DrawerHeader,
-    DrawerContent,
-    DrawerCloseButton,
     Grid,
-    Box,
-    Button,
-    Image,
-    Spinner,
-    Text,
-    Heading,
     GridItem,
-    Card, Flex,
-    Drawer, DrawerOverlay,
-    useDisclosure
-} from "@chakra-ui/react"
-import withAuth from "@/utils/withAuth"
+    Box,
+    Image,
+    Text,
+    FormControl,
+    FormLabel,
+    InputGroup,
+    InputLeftElement,
+    Input, Button
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import LoadingComponent from "@/components/loading";
 
-function ProductListEuropa({ openDrawer, onCloseDrawer, userData }) {
+// editando a chave de imagem, e do id do produto
+const transformProduct = (product) => {
+    return {
+        api_id: product.id,
+        origins: "EU",
+        name: product.name,
+        description: product.description,
+        category: product.category,
+        image: product.gallery[0],
+        price: product.price,
+        department: product.department,
+    };
+};
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+const ProductListEuropa = () => {
+    const [products, setProducts] = useState([]); // aqui e onde estao os produtos vindo da API
+    const [isLoading, setIsLoading] = useState(true); // estado de carregamento
+    const [error, setError] = useState(null); // estao de erros
 
-    const [cartItems, setCartItems] = useState([])
+    const [selectedProduct, setSelectedProduct] = useState(null); // quando clicamos no botao 'comprar',
+    // ele salva aquele produto aqui nesse estado
 
-    const [isLoading, setIsLoading] = useState(true)
-    //imagenm esta carregada?
-    const [imageIsLoad, setImageIsLoad] = useState(false)
 
-    //lista de produtos vindo da API
-    const [products, setProducts] = useState([])
-
-    const [currentPage, setCurrentPage] = useState(1)
-
-    // setamos pra mostrar 8 itens por pagina
-    const [itemsPerPage, setItemsPerPage] = useState(8)
+    const router = useRouter() // utilizando metodo de rota do next.js
 
     useEffect(() => {
-        fetch(" http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/european_provider")
-            .then((response) => response.json())
-            .then((data) => {
-                setProducts(data)
-                setIsLoading(false)
+        setIsLoading(true) // inicia o loading
+        axios // faz a requisicao na api
+            .get("http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/european_provider")
+            .then((response) => {
+                const products = response.data.map(transformProduct); // passa todos os produtos no transformProduct
+                console.log(products)
+                setProducts(products); // seta os produtos com os valores de 'products' filtrado
+                setIsLoading(false);
             })
-            .catch((error) => console.log(error))
-    }, [])
+            .catch((error) => {
+                setError(error.message);
+                setIsLoading(false);
+            });
+    }, []);
 
-    // verifica se houve alteracoes no openDrawer
-    useEffect(() => {
-        if (openDrawer) {
-            onOpen()
-        }
-    }, [openDrawer, onOpen])
-
-    // adicionando o item ao array carrinho
-    const addToCart = (productId) => {
-        setCartItems((currentCartItems) => [...currentCartItems, productId])
+    if (error) {
+        return <p>Ocorreu um erro: {error}</p>;
     }
-
-    // ele vai criar um novo array, vai filtrar o array onde estao os itens, e vai passar todos os itens
-    // que sejam diferente do productId para o novo array de itens, criando uma novo array
-    // sem o item que selecionamos
-    const removeToCart = (productId) => {
-        setCartItems((currentCartItems) => currentCartItems.filter(item => item !== productId))
-        console.log(cartItems)
-    }
-
-    const indexOfLastItem = currentPage * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = products.slice(indexOfFirstItem, indexOfLastItem)
-
-    // algoritmo pra fazer a paginacao
-    const pageNumbers = []
-    // ele ve o
-    for (let i = 1; i <= Math.ceil(products.length / itemsPerPage) ; i++) {
-        pageNumbers.push(i)
-    }
-
-    const renderPageNumbers = pageNumbers.map((number) => (
-        <Button
-            mr={4}
-            key={number}
-            colorScheme={currentPage === number ? "green" : undefined}
-            onClick={() => setCurrentPage(number)}
-        >
-            {number}
-        </Button>
-    ))
 
     return (
-        <div>
-        <Flex bg="#131921" p={6} alignItems="center" justifyContent="space-between">
-            <Text fontSize="lg" fontWeight="bold" color="white">
-                {userData && (
-                    <div>
-                        <p>Bem-vindo, {userData.name}!</p>
-                    </div>
-                )}
-            </Text>
-            <Button colorScheme="green" onClick={onOpen}>
-                Carrinho
-            </Button>
-        </Flex>
-        <Card margin={"3%"} padding={"10"}>
-
-            <Drawer isOpen={isOpen} placement="right" onClose={() => {
-                onCloseDrawer()
-                onClose()
-            }}
-                    blockScrollOnMount={false}>
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Carrinho</DrawerHeader>
-                    <DrawerBody>
-                        <ul>
-                            { cartItems.map((product) => (
-                                <Box
-                                    mb={10}
-                                    borderWidth="1px"
-                                    bg={"white"}
-                                    borderRadius="lg"
-                                    overflow="hidden">
-                                    <center><b><Text>{product.name}</Text></b> </center>
-                                    <Image
-                                        src={product.gallery[0]}
-                                        alt={product.name}
-                                        onLoad={() => setImageIsLoad(true)}
-                                    />
-                                    <center><b><Text> R$ {product.preco}</Text></b></center>
-                                    <Select>
-                                        <option value={1}>1 item</option>
-                                        <option value={2}>2 itens</option>
-                                        <option value={3}>3 itens</option>
-                                        <option value={4}>4 itens</option>
-                                        <option value={5}>5 itens</option>
-                                    </Select>
+        isLoading ? (
+                <LoadingComponent />
+            ) :
+            <Box>
+                <NavComponent />
+                <Box p="6">
+                    <Box mb="6" borderBottomWidth="1px" pb="3">
+                        <Text fontSize="2xl" fontWeight="bold">Produtos em Destaque</Text>
+                    </Box>
+                    <Box mb="6">
+                        <FormControl>
+                            <FormLabel>Buscar Produtos</FormLabel>
+                            <InputGroup>
+                                <InputLeftElement pointerEvents="none" />
+                                <Input type="text" placeholder="Digite aqui o nome do produto" />
+                            </InputGroup>
+                        </FormControl>
+                    </Box>
+                    <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                        {products.map((product) => (
+                            <GridItem key={product.api_id}>
+                                <Box borderWidth="1px" rounded="lg" overflow="hidden" shadow="md">
+                                    <Image src={product.image} />
+                                    <Box p="6">
+                                        <Box d="flex" alignItems="baseline" justifyContent="space-between">
+                                            <Box>
+                                                <Text fontWeight="semibold" fontSize="lg" color="teal.600" mr="2">
+                                                    {product.name}
+                                                </Text>
+                                                <Text mt="2" color="gray.500">
+                                                    {product.description}
+                                                </Text>
+                                            </Box>
+                                            <Box>
+                                                <Text fontWeight="semibold" fontSize="md" color="gray.500">
+                                                    R${product.price}
+                                                </Text>
+                                                <Box d="flex" alignItems="center" mt="2">
+                                                    <Text fontSize="sm" color="gray.500" mr="2">
+                                                        Em estoque
+                                                    </Text>
+                                                    <Button
+                                                        colorScheme="teal"
+                                                        size="sm"
+                                                        onClick={() => setSelectedProduct(product)}
+                                                    >
+                                                        Comprar
+                                                    </Button>
+                                                </Box>
+                                            </Box>
+                                        </Box>
+                                    </Box>
                                 </Box>
-                            ))}
-                            <Button colorScheme={"green"}>Fechar Pedido</Button>
-                        </ul>
-                    </DrawerBody>
-                </DrawerContent>
-            </Drawer>
+                            </GridItem>
+                        ))}
+                        {selectedProduct && (
+                            <ProductCard product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+                        )}
+                    </Grid>
+                </Box>
+            </Box>
+    );
+};
 
-            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-                {isLoading ? (
-                    <Spinner size={'xl'}/>
-                ) : (
-                    currentItems.map((product) => (
-                        <GridItem
-                            width={"100%"}
-                            key={product.id}
-                        >
-                            <Box
-                                borderWidth="1px"
-                                bg={"white"}
-                                borderRadius="lg"
-                                overflow="hidden"
-                            >
-                                {!imageIsLoad && <Spinner/>}
-                                    <Image
-                                        src={product.gallery[0]}
-                                        alt={product.name}
-                                        onLoad={() => setImageIsLoad(true)}
-                                    />
-                                <Box p="6">
-                                    <Heading as="h3" size="md" mb={2}>
-                                        {product.name}
-                                    </Heading>
-                                    <Text mb={4}>{product.descricao}</Text>
-                                    <Text fontWeight="bold" mb={2}>
-                                        R$ {product.preco}
-                                    </Text>
-                                    {
-                                        // verifica se o item ja foi selecionado
-                                        cartItems.includes(product) ?
-                                            (<Button
-                                                colorScheme="red"
-                                                onClick={() => removeToCart(product)}
-                                            >
-                                                Remover do carrinho
-                                            </Button>) :
-                                            (
-
-                                                <Button
-                                                    colorScheme="green"
-                                                    onClick={() => addToCart(product)}
-                                                >
-                                                    Adicionar ao carrinho
-                                                </Button>
-                                            )}
-                                </Box>
-                            </Box>
-                        </GridItem>
-                    ))
-                )}
-            </Grid>
-            <Flex p={1} alignItems="center">
-                {renderPageNumbers}
-            </Flex>
-        </Card>
-        </div>
-    )
-}
-
-export default withAuth(ProductListEuropa)
+export default ProductListEuropa;

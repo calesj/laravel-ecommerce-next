@@ -1,10 +1,3 @@
-import withAuth from "@/utils/withAuth";
+import Brasil from "@/pages/brasil";
 
-
-const dashboard = () => {
-    return (
-        <p>opa</p>
-    )
-}
-
-export default withAuth(dashboard)
+export default Brasil
