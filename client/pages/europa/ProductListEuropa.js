@@ -32,24 +32,21 @@ const transformProduct = (product) => {
 };
 
 const ProductListEuropa = () => {
-    const [products, setProducts] = useState([]); // aqui e onde estao os produtos vindo da API
-    const [isLoading, setIsLoading] = useState(true); // estado de carregamento
-    const [error, setError] = useState(null); // estao de erros
+    const [products, setProducts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [error, setError] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
-    const [selectedProduct, setSelectedProduct] = useState(null); // quando clicamos no botao 'comprar',
-    // ele salva aquele produto aqui nesse estado
-
-
-    const router = useRouter() // utilizando metodo de rota do next.js
+    const router = useRouter();
 
     useEffect(() => {
-        setIsLoading(true) // inicia o loading
-        axios // faz a requisicao na api
+        setIsLoading(true);
+        axios
             .get("http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/european_provider")
             .then((response) => {
-                const products = response.data.map(transformProduct); // passa todos os produtos no transformProduct
-                console.log(products)
-                setProducts(products); // seta os produtos com os valores de 'products' filtrado
+                const products = response.data.map(transformProduct);
+                setProducts(products);
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -58,9 +55,13 @@ const ProductListEuropa = () => {
             });
     }, []);
 
-    if (error) {
-        return <p>Ocorreu um erro: {error}</p>;
-    }
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredProducts = products.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         isLoading ? (
@@ -69,20 +70,22 @@ const ProductListEuropa = () => {
             <Box>
                 <NavComponent />
                 <Box p="6">
-                    <Box mb="6" borderBottomWidth="1px" pb="3">
-                        <Text fontSize="2xl" fontWeight="bold">Produtos em Destaque</Text>
-                    </Box>
                     <Box mb="6">
                         <FormControl>
                             <FormLabel>Buscar Produtos</FormLabel>
                             <InputGroup>
                                 <InputLeftElement pointerEvents="none" />
-                                <Input type="text" placeholder="Digite aqui o nome do produto" />
+                                <Input
+                                    type="text"
+                                    placeholder="Digite aqui o nome do produto"
+                                    value={searchTerm}
+                                    onChange={handleSearch}
+                                />
                             </InputGroup>
                         </FormControl>
                     </Box>
-                    <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-                        {products.map((product) => (
+                    <Grid templateColumns={{base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)'}} gap={6}>
+                    {filteredProducts.map((product) => (
                             <GridItem key={product.api_id}>
                                 <Box borderWidth="1px" rounded="lg" overflow="hidden" shadow="md">
                                     <Image src={product.image} />
@@ -92,9 +95,11 @@ const ProductListEuropa = () => {
                                                 <Text fontWeight="semibold" fontSize="lg" color="teal.600" mr="2">
                                                     {product.name}
                                                 </Text>
-                                                <Text mt="2" color="gray.500">
-                                                    {product.description}
-                                                </Text>
+                                                <Box maxH={{ base: "36px", md: "none" }} overflow="hidden">
+                                                    <Text mt="2" color="gray.500">
+                                                        {product.description}
+                                                    </Text>
+                                                </Box>
                                             </Box>
                                             <Box>
                                                 <Text fontWeight="semibold" fontSize="md" color="gray.500">
