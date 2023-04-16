@@ -123,7 +123,7 @@ const Login = () => {
                                 marginTop={6}
                                 width="full"
                             >
-                                Enviar
+                               Fazer Login
                             </Button>
                         </form>
                     </Card>
