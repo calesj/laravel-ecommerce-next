@@ -98,4 +98,24 @@ class CartController extends Controller
                 return response()->json($e);
             }
         }
+
+    public function deleteAllProductsFromCart()
+    {
+        $user = $this->request->user();
+
+        // atraves desse usuario, ele retorna os produtos que estao no carrinho desse usuario
+        $products = Product::all();
+
+        try {
+            foreach ($products as $product) {
+                // apaga todos os produtos do carrinho de uma vez
+                $user->cart->products()->detach($product->id);
+            }
+
+            return response()->json(['message' => 'produtos removidos do carrinho']);
+        }
+        catch (QueryException $e) {
+                return response()->json($e);
+            }
+    }
 }
