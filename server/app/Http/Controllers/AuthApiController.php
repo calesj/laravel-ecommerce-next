@@ -55,7 +55,7 @@ class AuthApiController extends Controller
             Auth::login($user);
 
             // Crie um token de acesso para o usuário
-            $accessToken = $user->createToken('authToken', [''], now()->addMinute(30))->plainTextToken;
+            $accessToken = $user->createToken('authToken')->plainTextToken;
 
             // confirma a operacao no banco
             DB::commit();

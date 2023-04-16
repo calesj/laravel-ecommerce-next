@@ -5,18 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cart extends Model
+class Order extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'status',
+        'total_price'
+    ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // relacionamento muitos pra muitos onde um carrinho pode ter varios produtos
-    public function products()
+    public function items()
     {
-        return $this->belongsToMany(Product::class, 'cart_product')->withPivot('quantity');
+        return $this->hasMany(Item::class);
     }
 }

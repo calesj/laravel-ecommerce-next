@@ -17,7 +17,7 @@ class CartController extends Controller
         'origins' => 'required',
         'name' => 'required',
         'price' => 'required|numeric',
-        'quantity' => 'required'
+        'quantity' => 'required|numeric'
     ];
 
     private $request;
@@ -46,7 +46,9 @@ class CartController extends Controller
             $user = $this->request->user();
 
             // aqui estamos verificando se o produto existe no banco, se nao existir ele cria um novo
-            $product = Product::where('api_id', $this->request->api_id)->first();
+            $product = Product::where('api_id', $this->request->api_id)->where('origins', $this->request->origins)->first();
+            // lembrando que podem existir dois produtos com o mesmo nome, e o mesmo api_id, por isso incrementamos o origins,
+            // pra verificar se o campo esta vindo da API da europa ou da API do brasil
             if (!$product){
                 $product = new Product;
                 $product->name = $this->request->name;
@@ -87,8 +89,7 @@ class CartController extends Controller
     public function removeFromCart($id)
     {
         $user = $this->request->user();
-        $products = Product::where('api_id', $id)->get();
-        foreach ($products as $product) {
+        $product = Product::where('api_id', $id)->first();
             try {
 
                 $user->cart->products()->detach($product->id);
@@ -97,7 +98,4 @@ class CartController extends Controller
                 return response()->json($e);
             }
         }
-
-    }
-
 }
