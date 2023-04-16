@@ -14,21 +14,23 @@ const OrderCard = ({ isOpen, onClose }) => {
     useEffect(() => {
 
         setIsLoading(true)
-        const orderConsult = () => {
+        const orderConsult = async () => {
             const endpoint = "http://127.0.0.1:8000/api/order/";
             const method = "GET";
 
-            makeRequest(endpoint, method).then((res) => {
+            try {
+                const res = await makeRequest(endpoint, method);
                 if (res) {
                     setIsOrders(res);
-                    setIsLoading(false)
-                } else {
-                    router.push("/login");
                 }
-            });
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
         };
         orderConsult();
-    }, [setIsOrders]);
+    }, [isOpen]);
 
     return (
         <>
