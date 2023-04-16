@@ -7,12 +7,26 @@ use App\Models\Item;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
+use function Webmozart\Assert\Tests\StaticAnalysis\length;
+
 class OrderController extends Controller
 {
     private $request;
     public function __construct(Request $request)
     {
         $this->request = $request;
+    }
+
+    public function myOrders()
+    {
+        $user = $this->request->user();
+
+        $orders = $user->orders;
+        if(count($orders) > 0) {
+            return response()->json($orders);
+        } else {
+            return response()->json(['message' => 'nao existe pedidos'], 204);
+        }
     }
     public function store() // metodo responsavel por gerar o pedido no banco
     {
