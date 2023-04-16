@@ -46,7 +46,7 @@ Utilizei o middleware de autenticação fornecido pelo Laravel para fazer a aute
 
 ## A lógica utilizada para consumir duas APIs diferentes de fornecedores.
 
-O maior problema que enfrentei foi a possibilidade de existirem dois produtos com o mesmo ID provenientes de APIs diferentes. Para contornar isso, implementei o campo origins no banco de dados, que armazena 'BRA' caso o produto seja proveniente da API brasileira e 'EU' caso seja proveniente da API europeia. Além disso, renomeei o ID original para api_id, permitindo que o Laravel crie um ID universal para todos os produtos independentemente da API de origem. 
+O maior problema que enfrentei foi a possibilidade de existirem dois produtos com o mesmo `ID` provenientes de APIs diferentes. Para contornar isso, implementei o campo `origins` no banco de dados, que armazena `BRA` caso o produto seja proveniente da API brasileira e `EU` caso seja proveniente da API europeia. Além disso, renomeei o `ID` original para `api_id`, permitindo que o Laravel crie um `ID` universal para todos os produtos independentemente da API de origem. 
 
 Eu decidi não salvar todos os produtos de uma só vez no banco de dados para evitar sobrecarregar o servidor. Então, sempre que um usuário adiciona um produto ao carrinho, as informações desse produto são salvas no banco, caso ainda não existam.
 
