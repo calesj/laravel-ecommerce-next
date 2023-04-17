@@ -29,7 +29,7 @@
 ## Observações
 - Os usuários têm acesso às páginas, no entanto, é necessário fazer o registro para adicionar um item ao carrinho ou fazer um pedido. Se o usuário tentar fazer qualquer uma dessas ações sem estar logado, ele será redirecionado.
 
-- O carrinho de compras é relacionado com o usuario parte do banco e quando um produto é adicionado a ele, ele é salvo no carrinho até que o usuário o remova.
+- O carrinho de compras é relacionado com o usuario, ou seja, faz parte do banco e quando um produto é adicionado a ele, ele é salvo no carrinho até que o usuário o remova.
 
 - Lembrando que fazer um pedido e adicionar um produto ao carrinho são coisas diferentes. Ambos estão disponíveis na aplicação e ambos são salvos no banco.
 
